@@ -1,27 +1,21 @@
 package example.micronaut.bookinventory
 
-import io.micronaut.context.ApplicationContext
 import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.client.HttpClient;
-import io.micronaut.http.client.RxHttpClient
-import io.micronaut.http.client.exceptions.HttpClientException
+import io.micronaut.http.client.HttpClient
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
-import io.micronaut.runtime.server.EmbeddedServer
-import org.junit.Test
-import spock.lang.AutoCleanup
-import spock.lang.Shared
+import io.micronaut.test.annotation.MicronautTest
 import spock.lang.Specification
 
-class BooksControllerSpec extends Specification {
-    @Shared
-    @AutoCleanup
-    EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
+import javax.inject.Inject
 
-    @Shared
-    @AutoCleanup
-    HttpClient client = HttpClient.create(embeddedServer.URL)
+@MicronautTest
+class BooksControllerSpec extends Specification {
+
+    @Inject
+    @Client("/")
+    HttpClient client
 
     void "for a book with inventory true is returned"() {
         when:

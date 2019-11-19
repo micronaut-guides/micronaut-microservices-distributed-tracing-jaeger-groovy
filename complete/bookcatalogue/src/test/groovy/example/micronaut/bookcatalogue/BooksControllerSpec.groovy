@@ -1,26 +1,25 @@
 package example.micronaut.bookcatalogue
 
-import io.micronaut.context.ApplicationContext
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
-import io.micronaut.runtime.server.EmbeddedServer
-import spock.lang.AutoCleanup
-import spock.lang.Shared
+import io.micronaut.http.client.annotation.Client
+import io.micronaut.test.annotation.MicronautTest
 import spock.lang.Specification
 
-class BooksControllerSpec extends Specification {
-    @Shared
-    @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
+import javax.inject.Inject
 
-    @Shared
-    @AutoCleanup
-    HttpClient client = HttpClient.create(embeddedServer.URL)
+@MicronautTest
+class BooksControllerSpec extends Specification {
+
+    @Inject
+    @Client("/")
+    HttpClient client
 
     void "it is possible to retrieve books"() {
         when:
         HttpRequest request = HttpRequest.GET("/books")
-        List books = client.toBlocking().retrieve(request, Argument.of(List, Book)) // <3>
+        List books = client.toBlocking().retrieve(request, Argument.listOf(Book))
 
         then:
         books.size() == 3

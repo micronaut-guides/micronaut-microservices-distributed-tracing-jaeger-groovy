@@ -1,28 +1,26 @@
 package example.micronaut.bookrecommendation
 
-import io.micronaut.context.ApplicationContext
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.HttpClient
-import io.micronaut.runtime.server.EmbeddedServer
-import spock.lang.AutoCleanup
-import spock.lang.Shared
+import io.micronaut.http.client.annotation.Client
+import io.micronaut.test.annotation.MicronautTest
 import spock.lang.Specification
 
-class BookControllerSpec extends Specification {
-    @Shared
-    @AutoCleanup
-    EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
+import javax.inject.Inject
 
-    @Shared
-    @AutoCleanup
-    HttpClient client = HttpClient.create(embeddedServer.URL)
+@MicronautTest
+class BookControllerSpec extends Specification {
+
+    @Inject
+    @Client("/")
+    HttpClient client
 
     void "retrieve books"() {
         when:
-        HttpResponse response = client.toBlocking().exchange(HttpRequest.GET("/books"), Argument.of(List, BookRecommendation))
+        HttpResponse response = client.toBlocking().exchange(HttpRequest.GET("/books"), Argument.listOf(BookRecommendation))
 
         then:
         response.status() == HttpStatus.OK

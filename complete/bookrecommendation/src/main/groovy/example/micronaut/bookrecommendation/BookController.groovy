@@ -6,21 +6,21 @@ import io.micronaut.http.annotation.Get
 import io.reactivex.Flowable
 
 @CompileStatic
-@Controller("/books")
+@Controller("/books") // <1>
 class BookController {
 
     private final BookCatalogueOperations bookCatalogueOperations
     private final BookInventoryOperations bookInventoryOperations
 
     BookController(BookCatalogueOperations bookCatalogueOperations,
-                   BookInventoryOperations bookInventoryOperations) {
+                   BookInventoryOperations bookInventoryOperations) { // <2>
         this.bookCatalogueOperations = bookCatalogueOperations
         this.bookInventoryOperations = bookInventoryOperations
     }
 
-    @Get("/")
+    @Get // <3>
     Flowable<BookRecommendation> index() {
-        return bookCatalogueOperations.findAll()
+        bookCatalogueOperations.findAll()
             .flatMapMaybe { b ->
                 bookInventoryOperations.stock(b.isbn)
                     .filter { hasStock -> hasStock == Boolean.TRUE }

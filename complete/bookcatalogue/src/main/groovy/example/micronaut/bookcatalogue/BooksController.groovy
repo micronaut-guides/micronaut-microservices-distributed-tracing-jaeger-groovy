@@ -5,10 +5,10 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 
 @CompileStatic
-@Controller("/books")
+@Controller("/books") // <1>
 class BooksController {
 
-    @Get("/")
+    @Get("/") // <2>
     List<Book> index() {
         [
             new Book("1491950358", "Building Microservices"),

@@ -9,17 +9,17 @@ import spock.lang.Specification
 
 import javax.inject.Inject
 
-@MicronautTest
+@MicronautTest // <1>
 class BooksControllerSpec extends Specification {
 
     @Inject
     @Client("/")
-    HttpClient client
+    HttpClient client // <2>
 
     void "it is possible to retrieve books"() {
         when:
-        HttpRequest request = HttpRequest.GET("/books")
-        List books = client.toBlocking().retrieve(request, Argument.listOf(Book))
+        HttpRequest request = HttpRequest.GET("/books") // <3>
+        List books = client.toBlocking().retrieve(request, Argument.listOf(Book)) // <4>
 
         then:
         books.size() == 3

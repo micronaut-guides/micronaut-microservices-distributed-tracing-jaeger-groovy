@@ -7,7 +7,6 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Produces
 import io.micronaut.tracing.annotation.ContinueSpan
 import io.micronaut.tracing.annotation.SpanTag
-
 import javax.validation.constraints.NotBlank
 
 @CompileStatic
@@ -17,7 +16,7 @@ class BooksController {
     @Produces(MediaType.TEXT_PLAIN)
     @Get("/stock/{isbn}")
     @ContinueSpan // <1>
-    Boolean stock(@SpanTag("stock.isbn") @NotBlank String isbn) { // <2>
+    Boolean stock(@SpanTag("stock.isbn") @NotBlank String isbn) {  // <2>
         bookInventoryByIsbn(isbn).map { bi -> bi.getStock() > 0 }.orElse(null)
     }
 
